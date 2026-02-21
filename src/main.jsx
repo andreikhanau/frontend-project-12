@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './store/store.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'; 
+import i18n from './i18n';
 
 import "./styles/main.css"
 
@@ -41,3 +42,5 @@ createRoot(document.getElementById('root')).render(
     </Provider>
   </StrictMode>,
 )
+
+document.title = i18n.t('app.title');

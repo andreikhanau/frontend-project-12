@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useSendMessageMutation } from "../store/api";
+import { useTranslation } from "react-i18next";
 
 const MessageForm = ({ activeChannelId, username }) => {
+  const { t } = useTranslation();
   const [text, setText] = useState("");
   const [sendMessage, { isLoading, error }] = useSendMessageMutation();
   const inputRef = useRef(null);
@@ -34,8 +36,8 @@ const MessageForm = ({ activeChannelId, username }) => {
         <input
           ref={inputRef}
           name="body"
-          aria-label="Новое сообщение"
-          placeholder={activeChannelId ? "Введите сообщение..." : "Выберите канал..."}
+          aria-label={t('chat.newMessageLabel')}
+          placeholder={activeChannelId ? t('chat.messagePlaceholder') : t('chat.selectChannelPlaceholder')}
           className="border-0 p-0 ps-2 form-control"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -56,13 +58,13 @@ const MessageForm = ({ activeChannelId, username }) => {
               d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
             />
           </svg>
-          <span className="visually-hidden">Отправить</span>
+          <span className="visually-hidden">{t('chat.send')}</span>
         </button>
       </div>
 
       {error && (
         <div className="text-danger small mt-2">
-          Не удалось отправить сообщение. Попробуйте ещё раз.
+          {t('chat.sendError')}
         </div>
       )}
     </form>

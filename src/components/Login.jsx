@@ -6,8 +6,10 @@ import { login as loginAction } from "../store/authSlice";
 import { useLoginMutation } from "../store/api";
 import picture from "../assets/avatar-DIE1AEpS.jpg";
 import FormComonent from "../components/formComponent";
+import { useTranslation } from "react-i18next";
 
 function LogIn() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -21,13 +23,13 @@ function LogIn() {
   
   return (
     <FormComonent
-        title="Войти"
+        title={t('auth.loginTitle')}
         image={picture}
         footer={
           <div>
-            Нет аккаунта?{" "}
+            {t('auth.noAccount')}{" "}
             <Link to="/signup" className="link-primary">
-              Регистрация
+              {t('auth.registration')}
             </Link>
           </div>
         }
@@ -63,11 +65,11 @@ function LogIn() {
                                 ? "is-invalid"
                                 : ""
                             }`}
-                            placeholder="Ваш ник"
+                            placeholder={t('auth.yourNick')}
                             autoComplete="username"
                             required
                           />
-                          <label htmlFor="username">Ваш ник</label>
+                          <label htmlFor="username">{t('auth.yourNick')}</label>
                           <ErrorMessage
                             name="username"
                             component="div"
@@ -86,11 +88,11 @@ function LogIn() {
                                 ? "is-invalid"
                                 : ""
                             }`}
-                            placeholder="Пароль"
+                            placeholder={t('auth.password')}
                             autoComplete="current-password"
                             required
                           />
-                          <label htmlFor="password">Пароль</label>
+                          <label htmlFor="password">{t('auth.password')}</label>
                           <ErrorMessage
                             name="password"
                             component="div"
@@ -101,7 +103,7 @@ function LogIn() {
                         {/* server error */}
                         {error && (
                           <div className="alert alert-danger py-2" role="alert">
-                            Неверное имя пользователя или пароль
+                            {t('auth.invalidCredentials')}
                           </div>
                         )}
 
@@ -111,7 +113,7 @@ function LogIn() {
                           className="w-100 mb-3 btn btn-outline-primary"
                           disabled={isLoading}
                         >
-                          {isLoading ? "Загрузка..." : "Войти"}
+                          {isLoading ? t('auth.loading') : t('auth.loginTitle')}
                         </button>
                       </Form>
                     )}

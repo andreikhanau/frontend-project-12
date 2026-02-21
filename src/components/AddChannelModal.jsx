@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useAddChannelMutation } from '../store/api';
+import { useTranslation } from 'react-i18next';
 
 const AddChannelModal = ({ show, onClose, onCreated }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [createChannel, { isLoading, error}] = useAddChannelMutation();
   const inputRef = useRef(null);
@@ -34,33 +36,33 @@ const AddChannelModal = ({ show, onClose, onCreated }) => {
     <Modal show={show} onHide={onClose} centered>
       <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>Добавить канал</Modal.Title>
+          <Modal.Title>{t('channels.addModalTitle')}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <Form.Control
             ref={inputRef}
             type="text"
-            placeholder="Имя канала"
+            placeholder={t('channels.channelName')}
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={isLoading}
-            aria-label="Имя канала"
+            aria-label={t('channels.channelName')}
             autoComplete="off"
           />
           {error ? (
             <div className="text-danger mt-2">
-              Не удалось создать канал. Попробуйте ещё раз.
+              {t('channels.createError')}
             </div>
           ) : null}
         </Modal.Body>
 
         <Modal.Footer>
           <Button variant="secondary" onClick={onClose} disabled={isLoading}>
-            Отменить
+            {t('common.cancel')}
           </Button>
           <Button type="submit" disabled={isLoading || !name.trim()}>
-            Отправить
+            {t('common.submit')}
           </Button>
         </Modal.Footer>
       </Form>

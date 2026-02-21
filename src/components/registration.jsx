@@ -7,8 +7,10 @@ import { Formik,Form as FormikForm, Field, ErrorMessage } from "formik";
 import { Container, Form as BootstrapForm, Card, Row, Col } from "react-bootstrap";
 import FormComponent from "../components/formComponent";
 import picture from "../assets/signUp.jpg";
+import { useTranslation } from "react-i18next";
 
 const Registration = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -23,15 +25,15 @@ const Registration = () => {
 
 return (
     <FormComponent
-        title="Регистрация"
+        title={t('auth.signupTitle')}
         image={picture}
     >
         <Formik
                     initialValues={{ username: "", password: "" }}
                     validate={(values) => {
                       const errors = {};
-                      if (!values.username) errors.username = "Required";
-                      if (!values.password) errors.password = "Required";
+                      if (!values.username) errors.username = t('auth.required');
+                      if (!values.password) errors.password = t('auth.required');
                       return errors;
                     }}
                     onSubmit={async (values) => {
@@ -56,7 +58,7 @@ return (
                           <Field
                             type="text"
                             name="username"
-                            placeholder="Имя пользователя"
+                            placeholder={t('auth.username')}
                             className="form-control"
                           />
                           <ErrorMessage name="username" component="div" className="text-danger" />
@@ -66,7 +68,7 @@ return (
                           <Field
                             type="password"
                             name="password"
-                            placeholder="Пароль"
+                            placeholder={t('auth.password')}
                             className="form-control"
                           />
                           <ErrorMessage name="password" component="div" className="text-danger" />
@@ -77,12 +79,12 @@ return (
                           className="btn btn-primary w-100"
                           disabled={isSubmitting || isLoading}
                         >
-                          {isLoading ? "Идет регистрация" : "Зарегистрироваться"}
+                          {isLoading ? t('auth.signingUp') : t('auth.signUpButton')}
                         </button>
 
                         {error && (
                           <div className="text-danger mt-2">
-                            Registration failed. Please try again.
+                            {t('auth.registrationFailed')}
                           </div>
                         )}
                       </FormikForm>
