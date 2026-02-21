@@ -24,8 +24,16 @@ function App() {
   //logout handler end
 
   // Fetch channels and manage active channel state
-  const { data: channels = []} = useGetChannelsQuery();
-  const { data: messages = [] } = useGetMessagesQuery();
+  const { data: channels = [] } = useGetChannelsQuery(undefined, {
+    pollingInterval: 3000,
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+  });
+  const { data: messages = [] } = useGetMessagesQuery(undefined, {
+    pollingInterval: 1500,
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+  });
   const [activeChannelId, setActiveChannelId] = useState(null);
   const messageCount = messages.filter(
     (m) => m.channelId === activeChannelId
