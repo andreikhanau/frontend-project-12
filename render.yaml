@@ -2,6 +2,6 @@ services:
   - type: web
     name: frontend-project-12
     env: node
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npx start-server -s dist -a 0.0.0.0 -p $PORT
     
