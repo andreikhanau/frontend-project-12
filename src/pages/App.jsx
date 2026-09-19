@@ -1,40 +1,32 @@
-import {useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
+import { useEffect} from 'react';
 import ChannelsSideBar from '../components/getChannels';
-import { useGetChannelsQuery } from '../store/api';
+import { useChannelsQuery, useMessagesQuery } from '../store/apiQueries';
 import NavBar from '../components/navBar';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logout } from '../store/authSlice'; 
 import { Container } from 'react-bootstrap';
 import ChatHeader from '../components/chatHeader';
 import MessageForm from '../components/messageForm';
 import MessagesList from '../components/messages';
-import { useGetMessagesQuery } from '../store/api';
+import { useAuthStore } from '../store/authStore';
+import useUIStateStore from '../store/uiState';
+import ChannelSocketSync from '../sockets/ChannelSocketSync';
+import MessageSocketSync from '../sockets/MessageSocketSync';
 
 function App() {
-  const username = useSelector((state) => state.auth.username);// get current username from Redux
-  // Logout handler
+  const username = useAuthStore((state) => state.username);
+  const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const handleLogout = () => {
-    dispatch(logout());   // updates Redux + clears localStorage
-    navigate('/login');   // redirects to login page
+    logout();
+    navigate('/login');
   };
   //logout handler end
 
   // Fetch channels and manage active channel state
-  const { data: channels = [] } = useGetChannelsQuery(undefined, {
-    pollingInterval: 3000,
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
-  const { data: messages = [] } = useGetMessagesQuery(undefined, {
-    pollingInterval: 1500,
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
-  const [activeChannelId, setActiveChannelId] = useState(null);
+  const { data: channels = [] } = useChannelsQuery();
+  const { data: messages = [] } = useMessagesQuery();
+  const { activeChannelId, setActiveChannelId } = useUIStateStore();
+
   const messageCount = messages.filter(
     (m) => m.channelId === activeChannelId
     ).length;
@@ -43,20 +35,12 @@ function App() {
     if (!activeChannelId && channels.length) {
       setActiveChannelId(channels[0].id);
     }
-  }, [channels, activeChannelId]); 
+  }, [channels, activeChannelId, setActiveChannelId]);
   
-  useEffect(() => {
-    if (activeChannelId) {
-      console.log(activeChannelId);
-      console.log(username);
-    }
-  }, [activeChannelId, username]);
-  // Fetch channels and manage active channel state end
-
-
-
   return (
     <div className="h-100 d-flex flex-column bg-white">
+      <ChannelSocketSync />
+      <MessageSocketSync />
       <NavBar onLogout={handleLogout} />
 
       {/* Main content area */}

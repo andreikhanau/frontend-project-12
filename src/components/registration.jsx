@@ -1,20 +1,20 @@
-import { useSignUpMutation } from "../store/api";
-import { login } from "../store/authSlice";
+import { useSignUpMutation } from "../store/apiQueries";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { Formik,Form as FormikForm, Field, ErrorMessage } from "formik";
 import { Container, Form as BootstrapForm, Card, Row, Col } from "react-bootstrap";
 import FormComponent from "../components/formComponent";
 import picture from "../assets/signUp.jpg";
 import { useTranslation } from "react-i18next";
+import { useAuthStore } from "../store/authStore";
 
 const Registration = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const [signUp, { isLoading, error}] = useSignUpMutation();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const login = useAuthStore((state) => state.login);
+  const { mutateAsync: signUp, isPending: isLoading, error } =
+    useSignUpMutation();
   
   useEffect(() => {
     // Check if the user is already authenticated
@@ -38,13 +38,11 @@ return (
                     }}
                     onSubmit={async (values) => {
                       try {
-                        const res = await signUp(values).unwrap();
-                        dispatch(
-                          login({
-                            token: res.token,
-                            username: res.username,
-                          })
-                        );
+                        const res = await signUp(values);
+                        login({
+                          token: res.token,
+                          username: res.username,
+                        });
                         navigate("/");
                       } catch (e) {
                         console.error("Login failed:", e);

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { useSendMessageMutation } from "../store/api";
+import { useSendMessageMutation } from "../store/apiQueries";
 import { useTranslation } from "react-i18next";
 
 const MessageForm = ({ activeChannelId, username }) => {
   const { t } = useTranslation();
   const [text, setText] = useState("");
-  const [sendMessage, { isLoading, error }] = useSendMessageMutation();
+  const { mutateAsync: sendMessage, isPending: isLoading, error } =
+    useSendMessageMutation();
   const inputRef = useRef(null);
 
   // When channel changes: clear input + focus
@@ -20,7 +21,7 @@ const MessageForm = ({ activeChannelId, username }) => {
     if (!body || !activeChannelId) return;
 
     try {
-      await sendMessage({ channelId: activeChannelId, body, username }).unwrap();
+      await sendMessage({ channelId: activeChannelId, body, username });
       setText(""); // clear after successful send
       inputRef.current?.focus();
     } catch {

@@ -1,16 +1,17 @@
-import React, {useState} from 'react';
-import { useGetChannelsQuery } from '../store/api';
+import React from 'react';
+import { useChannelsQuery } from '../store/apiQueries';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { Container, Row, Col, Nav, Button, Card } from "react-bootstrap";
 import AddChannelModal from './AddChannelModal';
 import { useTranslation } from 'react-i18next';
+import { useUIStateStore } from '../store/uiState';
 
 const ChannelsSidebar = ({ onSelectChannel, activeId }) => {
   const { t } = useTranslation();
-  const { data: channels, isLoading, error } = useGetChannelsQuery();
+  const { data: channels, isLoading, error } = useChannelsQuery();
 
   //modal logic
-  const [showAddModal, setShowAddModal] = useState(false);
+  const {showAddModal, setShowAddModal} = useUIStateStore();
 
   if (isLoading) return <div className="p-3">{t('channels.loading')}</div>;
   if (error) return <div className="p-3 text-danger">{t('channels.loadError')}</div>;
@@ -42,7 +43,7 @@ const ChannelsSidebar = ({ onSelectChannel, activeId }) => {
                 onClick={() => onSelectChannel(ch.id)}
                 className="text-start w-100"
               >
-                #{ch.name}
+                # {ch.name}
             </Nav.Link>
           </Nav.Item>
         ))}

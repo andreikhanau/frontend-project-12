@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useAddChannelMutation } from '../store/api';
+import { useAddChannelMutation } from '../store/apiQueries';
 import { useTranslation } from 'react-i18next';
 
 const AddChannelModal = ({ show, onClose, onCreated }) => {
   const { t } = useTranslation();
   const [name, setName] = useState('');
-  const [createChannel, { isLoading, error}] = useAddChannelMutation();
+  const { mutateAsync: createChannel, isPending: isLoading, error } =
+    useAddChannelMutation();
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const AddChannelModal = ({ show, onClose, onCreated }) => {
           if (!trimmed) return;
 
           try {
-            const newChannel = await createChannel({ name: trimmed }).unwrap();
+            const newChannel = await createChannel({ name: trimmed });
             // newChannel => { id, name, removable }
             onCreated?.(newChannel);
             onClose();

@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode} from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './pages/App.jsx'
 import NotFound from './pages/NotFound.jsx'
@@ -6,12 +6,13 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import LogIn from './pages/Login.jsx'
 import SignUp from './pages/SignUp.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import { store } from './store/store.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import i18n from './i18n';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 import "./styles/main.css"
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -37,9 +38,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Provider store={store}>
-    <RouterProvider router={router}/>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router}/>
+    </QueryClientProvider>
   </StrictMode>,
 )
 

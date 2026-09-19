@@ -1,19 +1,19 @@
 import React , { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { login as loginAction } from "../store/authSlice";
-import { useLoginMutation } from "../store/api";
+import { useLoginMutation } from "../store/apiQueries";
 import picture from "../assets/avatar-DIE1AEpS.jpg";
 import FormComonent from "../components/formComponent";
 import { useTranslation } from "react-i18next";
+import { useAuthStore } from "../store/authStore";
 
 function LogIn() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const [login, { isLoading, error}] = useLoginMutation();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const login = useAuthStore((state) => state.login);
+  const { mutateAsync: loginMutation, isPending: isLoading, error } =
+    useLoginMutation();
   useEffect(() => {
         // Check if the user is already authenticated
         if (isAuthenticated) {
@@ -38,16 +38,13 @@ function LogIn() {
                     initialValues={{ username: "", password: "" }}
                     onSubmit={async (values) => {
                       try {
-                        const res = await login(values).unwrap();
-                        dispatch(
-                          loginAction({
-                            token: res.token,
-                            username: res.username,
-                          })
-                        );
+                        const res = await loginMutation(values);
+                        login({
+                          token: res.token,
+                          username: res.username,
+                        });
                         navigate("/");
                       } catch (e) {
-                        // already handled by `error`, but keep for safety
                         console.error("Login failed:", e);
                       }
                     }}
