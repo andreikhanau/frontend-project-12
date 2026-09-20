@@ -55,7 +55,7 @@ const en = {
     removeError: 'Failed to remove channel. Please try again.',
     createdSuccessfully: 'Channel created',
     manage: 'Channel management',
-    renamedSuccessfully: 'Channel renamed successfully',
+    renamedSuccessfully: 'Channel renamed',
     removedSuccessfully: 'Channel removed',
   },
   chat: {

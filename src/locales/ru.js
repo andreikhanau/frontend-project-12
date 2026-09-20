@@ -55,7 +55,7 @@ const ru = {
     removeError: 'Не удалось удалить канал. Попробуйте еще раз.',
     createdSuccessfully: 'Канал создан',
     manage: 'Управление каналом',
-    renamedSuccessfully: 'Канал успешно переименован',
+    renamedSuccessfully: 'Канал переименован',
     removedSuccessfully: 'Канал удалён',
   },
   chat: {
