@@ -16,7 +16,7 @@ import { createAuthStore } from './stores/authStore.js';
 import { createUIStateStore } from './stores/uiState.js';
 import { StoreProvider } from './stores/StoreProvider.jsx';
 
-const init = () => {
+const init = (container = document.getElementById('root')) => {
   Sentry.init({
     dsn: import.meta.env.VITE_BUGSINK_DSN,
     environment: import.meta.env.MODE,
@@ -52,7 +52,7 @@ const init = () => {
 
   document.title = i18n.t('app.title');
 
-  createRoot(document.getElementById('root')).render(
+  createRoot(container).render(
     <StrictMode>
       <StoreProvider authStore={authStore} uiStateStore={uiStateStore}>
         <MantineProvider>

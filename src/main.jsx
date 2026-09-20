@@ -4,4 +4,4 @@ import '@mantine/notifications/styles.css';
 import './styles/main.css';
 import init from './init.jsx';
 
-init();
+init(document.getElementById('root'));
