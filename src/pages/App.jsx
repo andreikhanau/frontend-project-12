@@ -1,14 +1,13 @@
 import { useEffect} from 'react';
-import ChannelsSideBar from '../components/getChannels';
-import { useChannelsQuery, useMessagesQuery } from '../store/apiQueries';
+import ChannelsSideBar from '../components/channelsBar.jsx';
+import { useChannelsQuery, useMessagesQuery } from '../api/apiQueries.js';
 import NavBar from '../components/navBar';
 import { useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import ChatHeader from '../components/chatHeader';
 import MessageForm from '../components/messageForm';
 import MessagesList from '../components/messages';
-import { useAuthStore } from '../store/authStore';
-import useUIStateStore from '../store/uiState';
+import { useAuthStore, useUIStateStore } from '../stores/useStores.js';
 import ChannelSocketSync from '../sockets/ChannelSocketSync';
 import MessageSocketSync from '../sockets/MessageSocketSync';
 
@@ -32,8 +31,14 @@ function App() {
     ).length;
 
   useEffect(() => {
-    if (!activeChannelId && channels.length) {
+    const activeChannelExists = channels.some(
+      (channel) => channel.id === activeChannelId
+    );
+
+    if (channels.length && (!activeChannelId || !activeChannelExists)) {
       setActiveChannelId(channels[0].id);
+    } else if (!channels.length && activeChannelId) {
+      setActiveChannelId(null);
     }
   }, [channels, activeChannelId, setActiveChannelId]);
   

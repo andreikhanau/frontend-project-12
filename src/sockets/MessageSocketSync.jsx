@@ -7,10 +7,13 @@ function MessageSocketSync() {
 
   useEffect(() => {
     const handleNewMessage = (message) => {
-      queryClient.setQueryData(['messages'], (messages = []) => [
-        ...messages,
-        message,
-      ]);
+      queryClient.setQueryData(['messages'], (messages = []) => {
+        if (messages.some((item) => item.id === message.id)) {
+          return messages;
+        }
+
+        return [...messages, message];
+      });
     };
 
     socket.on('newMessage', handleNewMessage);

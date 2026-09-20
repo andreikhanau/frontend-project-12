@@ -13,19 +13,26 @@ import {
   removeChannelRequest,
   sendMessageRequest,
   signUpRequest,
-} from './apiFunctions';
+} from './apiFunctions.js';
+import { useAuthStore } from '../stores/useStores.js';
 
-export const useChannelsQuery = () =>
-  useQuery({
+export const useChannelsQuery = () => {
+  const token = useAuthStore((state) => state.token);
+
+  return useQuery({
     queryKey: ['channels'],
-    queryFn: fetchChannels,
+    queryFn: () => fetchChannels(token),
   });
+};
 
-export const useMessagesQuery = () =>
-  useQuery({
+export const useMessagesQuery = () => {
+  const token = useAuthStore((state) => state.token);
+
+  return useQuery({
     queryKey: ['messages'],
-    queryFn: fetchMessages,
+    queryFn: () => fetchMessages(token),
   });
+};
 
 export const useLoginMutation = () =>
   useMutation({
@@ -39,9 +46,10 @@ export const useSignUpMutation = () =>
 
 export const useAddChannelMutation = () => {
   const queryClient = useQueryClient();
+  const token = useAuthStore((state) => state.token);
 
   return useMutation({
-    mutationFn: addChannelRequest,
+    mutationFn: (channelData) => addChannelRequest(channelData, token),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['channels'],
@@ -52,9 +60,10 @@ export const useAddChannelMutation = () => {
 
 export const useEditChannelMutation = () => {
   const queryClient = useQueryClient();
+  const token = useAuthStore((state) => state.token);
 
   return useMutation({
-    mutationFn: editChannelRequest,
+    mutationFn: (channelData) => editChannelRequest(channelData, token),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['channels'],
@@ -65,12 +74,22 @@ export const useEditChannelMutation = () => {
 
 export const useRemoveChannelMutation = () => {
   const queryClient = useQueryClient();
+  const token = useAuthStore((state) => state.token);
 
   return useMutation({
-    mutationFn: removeChannelRequest,
-    onSuccess: () => {
+    mutationFn: (channelId) => removeChannelRequest(channelId, token),
+    onSuccess: (_removedChannel, channelId) => {
+      queryClient.setQueryData(['channels'], (channels = []) =>
+        channels.filter((channel) => channel.id !== channelId)
+      );
+      queryClient.setQueryData(['messages'], (messages = []) =>
+        messages.filter((message) => message.channelId !== channelId)
+      );
       queryClient.invalidateQueries({
         queryKey: ['channels'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['messages'],
       });
     },
   });
@@ -78,9 +97,10 @@ export const useRemoveChannelMutation = () => {
 
 export const useSendMessageMutation = () => {
   const queryClient = useQueryClient();
+  const token = useAuthStore((state) => state.token);
 
   return useMutation({
-    mutationFn: sendMessageRequest,
+    mutationFn: (message) => sendMessageRequest(message, token),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['messages'],

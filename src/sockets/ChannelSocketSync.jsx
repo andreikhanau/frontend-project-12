@@ -7,10 +7,13 @@ function ChannelSocketSync() {
 
   useEffect(() => {
     const handleNewChannel = (channel) => {
-      queryClient.setQueryData(['channels'], (channels = []) => [
-        ...channels,
-        channel,
-      ]);
+      queryClient.setQueryData(['channels'], (channels = []) => {
+        if (channels.some((item) => item.id === channel.id)) {
+          return channels;
+        }
+
+        return [...channels, channel];
+      });
     };
 
     const handleRenameChannel = (updatedChannel) => {

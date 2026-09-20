@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useSendMessageMutation } from "../store/apiQueries";
+import { useSendMessageMutation } from "../api/apiQueries.js";
 import { useTranslation } from "react-i18next";
+import leoProfanity from "../locales/profanity.jsx";
+import { notifications } from "@mantine/notifications";
 
 const MessageForm = ({ activeChannelId, username }) => {
   const { t } = useTranslation();
@@ -19,6 +21,15 @@ const MessageForm = ({ activeChannelId, username }) => {
     e.preventDefault();
     const body = text.trim();
     if (!body || !activeChannelId) return;
+
+    if (leoProfanity.check(body)) {
+      notifications.show({
+        title: t('chat.profanityTitle'),
+        message: t('chat.profanityMessage'),
+        color: 'red',
+      });
+      return;
+    }
 
     try {
       await sendMessage({ channelId: activeChannelId, body, username });

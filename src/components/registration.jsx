@@ -1,20 +1,28 @@
-import { useSignUpMutation } from "../store/apiQueries";
+import { useSignUpMutation } from "../api/apiQueries.js";
 import { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Formik,Form as FormikForm, Field, ErrorMessage } from "formik";
-import { Container, Form as BootstrapForm, Card, Row, Col } from "react-bootstrap";
+import { useNavigate} from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Form as BootstrapForm} from "react-bootstrap";
 import FormComponent from "../components/formComponent";
 import picture from "../assets/signUp.jpg";
 import { useTranslation } from "react-i18next";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../stores/useStores.js";
 
 const Registration = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAuthStore((state) => Boolean(state.token));
   const login = useAuthStore((state) => state.login);
   const { mutateAsync: signUp, isPending: isLoading, error } =
     useSignUpMutation();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: { username: "", password: "", confirmPassword: "" },
+  });
   
   useEffect(() => {
     // Check if the user is already authenticated
@@ -28,66 +36,96 @@ return (
         title={t('auth.signupTitle')}
         image={picture}
     >
-        <Formik
-                    initialValues={{ username: "", password: "" }}
-                    validate={(values) => {
-                      const errors = {};
-                      if (!values.username) errors.username = t('auth.required');
-                      if (!values.password) errors.password = t('auth.required');
-                      return errors;
-                    }}
-                    onSubmit={async (values) => {
-                      try {
-                        const res = await signUp(values);
-                        login({
-                          token: res.token,
-                          username: res.username,
-                        });
-                        navigate("/");
-                      } catch (e) {
-                        console.error("Login failed:", e);
-                      }
-                    }}
-                  >
-                    {({ isSubmitting }) => (
-                      // Formik's <Form> (aliased to FormikForm) wires submit+validation automatically
-                      <FormikForm noValidate>
-                        <BootstrapForm.Group className="mb-3" controlId="formUsername">
-                          <Field
-                            type="text"
-                            name="username"
-                            placeholder={t('auth.username')}
-                            className="form-control"
-                          />
-                          <ErrorMessage name="username" component="div" className="text-danger" />
-                        </BootstrapForm.Group>
 
-                        <BootstrapForm.Group className="mb-3" controlId="formPassword">
-                          <Field
-                            type="password"
-                            name="password"
-                            placeholder={t('auth.password')}
-                            className="form-control"
-                          />
-                          <ErrorMessage name="password" component="div" className="text-danger" />
-                        </BootstrapForm.Group>
+        <BootstrapForm
+          noValidate
+          onSubmit={handleSubmit(async (values) => {
+            try {
+              const res = await signUp({
+                username: values.username,
+                password: values.password,
+              });
+              login({
+                token: res.token,
+                username: res.username,
+              });
+              navigate("/");
+            } catch (submitError) {
+              console.error("Registration failed:", submitError);
+            }
+          })}//all form submission logic is handled by react-hook-form's handleSubmit
+        >
 
-                        <button
-                          type="submit"
-                          className="btn btn-primary w-100"
-                          disabled={isSubmitting || isLoading}
-                        >
-                          {isLoading ? t('auth.signingUp') : t('auth.signUpButton')}
-                        </button>
+          <BootstrapForm.Group className="mb-3" controlId="formUsername">
+            <BootstrapForm.Control
+              type="text"
+              placeholder={t('auth.username')}
+              className={`form-control${errors.username ? " is-invalid" : ""}`}
+              {...register("username", {
+                required: t('auth.required'),
+                minLength: {
+                  value: 3,
+                  message: t('auth.usernameMinLength'),
+                },
+                maxLength: {
+                  value: 20,
+                  message: t('auth.usernameMaxLength'),
+                },
+              })}
+            />
+            {errors.username && (
+              <div className="text-danger">{errors.username.message}</div>
+            )}
+          </BootstrapForm.Group>
 
-                        {error && (
-                          <div className="text-danger mt-2">
-                            {t('auth.registrationFailed')}
-                          </div>
-                        )}
-                      </FormikForm>
-                    )}
-        </Formik>
+          <BootstrapForm.Group className="mb-3" controlId="formPassword">
+            <BootstrapForm.Control
+              type="password"
+              placeholder={t('auth.password')}
+              className={`form-control${errors.password ? " is-invalid" : ""}`}
+              {...register("password", {
+                required: t('auth.required'),
+                minLength: {
+                  value: 6,
+                  message: t('auth.passwordMinLength'),
+                },
+              })}
+            />
+            {errors.password && (
+              <div className="text-danger">{errors.password.message}</div>
+            )}
+          </BootstrapForm.Group>
+
+          <BootstrapForm.Group className="mb-3" controlId="formConfirmPassword">
+            <BootstrapForm.Control
+              type="password"
+              placeholder={t('auth.confirmPassword')}
+              className={`form-control${errors.confirmPassword ? " is-invalid" : ""}`}
+              {...register("confirmPassword", {
+                required: t('auth.required'),
+                validate: (value) =>
+                  value === watch("password") || t('auth.passwordsMustMatch'),
+              })}
+            />
+            {errors.confirmPassword && (
+              <div className="text-danger">{errors.confirmPassword.message}</div>
+            )}
+          </BootstrapForm.Group>
+
+          <button
+            type="submit"
+            className="btn btn-primary w-100"
+            disabled={isSubmitting || isLoading}
+          >
+            {isLoading ? t('auth.signingUp') : t('auth.signUpButton')}
+          </button>
+
+          {error && (
+            <div className="text-danger mt-2">
+              {t('auth.registrationFailed')}
+            </div>
+          )}
+        </BootstrapForm>
     </FormComponent>
   );
 }

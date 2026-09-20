@@ -1,16 +1,16 @@
 import React , { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate, Link } from "react-router-dom";
-import { useLoginMutation } from "../store/apiQueries";
+import { useLoginMutation } from "../api/apiQueries.js";
 import picture from "../assets/avatar-DIE1AEpS.jpg";
 import FormComonent from "../components/formComponent";
 import { useTranslation } from "react-i18next";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../stores/useStores.js";
 
 function LogIn() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAuthStore((state) => Boolean(state.token));
   const login = useAuthStore((state) => state.login);
   const { mutateAsync: loginMutation, isPending: isLoading, error } =
     useLoginMutation();

@@ -1,6 +1,6 @@
 # Hexlet Chat (Frontend Project 12)
 
-A small Slack-like chat app built with React, Redux Toolkit (RTK Query), Formik, and Bootstrap.
+A small Slack-like chat app built with React, TanStack Query, Zustand, React Hook Form, and Bootstrap.
 
 Live demo: https://frontend-project-12-bkd7.onrender.com/
 
@@ -18,9 +18,9 @@ Live demo: https://frontend-project-12-bkd7.onrender.com/
 
 - React 19
 - React Router
-- Redux Toolkit + RTK Query
-- React Redux
-- Formik
+- TanStack Query
+- Zustand
+- React Hook Form
 - Bootstrap + React Bootstrap
 - Vite
 - `@hexlet/chat-server` (API + static server for deployment)
@@ -32,7 +32,9 @@ src/
   assets/          # Images
   components/      # Reusable UI blocks and forms
   pages/           # Route-level pages
-  store/           # Redux store, auth slice, RTK Query API
+  api/             # API request functions and TanStack Query hooks
+  stores/          # Zustand stores for auth and UI state
+  sockets/         # Socket.IO connection and cache synchronization
   styles/          # Global styles
 ```
 
@@ -52,22 +54,30 @@ npm run dev
 
 Frontend runs on `http://localhost:5002`.
 
+Open the development app at:
+
+`http://localhost:5002/`
+
 Note: in local dev, Vite proxies `/api` and `/socket.io` to backend `http://localhost:5001` (see `vite.config.js`).  
 If backend is not running, auth/messages requests will fail.
 
 ## Local Production-Like Run
 
-Build and serve static app:
+Build and start the chat server:
 
 ```bash
 make run
 ```
 
+Open the production-like app at:
+
+`http://localhost:5001/`
+
 Equivalent commands:
 
 ```bash
 npm run build
-npx start-server -s ./dist
+node server.js
 ```
 
 ## NPM Scripts
@@ -94,7 +104,6 @@ Important:
 ## Auth/Data Notes
 
 - Auth token and username are stored in `localStorage`
-- Redux store keeps:
-  - `auth` state (token, username, auth flag)
-  - RTK Query API cache (channels/messages and request states)
+- Zustand stores auth and UI state.
+- TanStack Query caches channels and messages.
 - Chat server data is in-memory by default; server restart clears channels/messages

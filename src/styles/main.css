@@ -1,3 +1,65 @@
+.channel-row {
+  min-height: 48px;
+  margin: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  transition: box-shadow 180ms ease;
+}
+
+.channel-row:hover {
+  box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.35);
+}
+
+.channel-row.active {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.channel-link {
+  min-width: 0;
+  color: inherit;
+  background: transparent !important;
+}
+
+.channel-link:hover,
+.channel-link:focus {
+  color: inherit;
+}
+
+.channel-toggle::after {
+  display: none;
+}
+
+.channel-toggle {
+  color: inherit !important;
+  border: 1px solid transparent !important;
+  border-radius: 0.375rem;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.channel-toggle:hover,
+.channel-toggle:focus-visible {
+  color: inherit !important;
+  border-color: currentColor !important;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.channel-chevron {
+  transition: transform 180ms ease;
+}
+
+.channel-toggle:hover .channel-chevron,
+.channel-toggle:focus-visible .channel-chevron {
+  transform: translateY(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .channel-row,
+  .channel-chevron,
+  .channel-toggle {
+    transition: none;
+  }
+}
+
 html, body, #root {
     height: 100%;
     margin: 0;   /* reset default margin */
