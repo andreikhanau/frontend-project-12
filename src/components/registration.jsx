@@ -59,6 +59,7 @@ return (
           <BootstrapForm.Group className="mb-3" controlId="formUsername">
             <BootstrapForm.Control
               type="text"
+              aria-label={t('auth.username')}
               placeholder={t('auth.username')}
               className={`form-control${errors.username ? " is-invalid" : ""}`}
               {...register("username", {
@@ -81,6 +82,7 @@ return (
           <BootstrapForm.Group className="mb-3" controlId="formPassword">
             <BootstrapForm.Control
               type="password"
+              aria-label={t('auth.password')}
               placeholder={t('auth.password')}
               className={`form-control${errors.password ? " is-invalid" : ""}`}
               {...register("password", {
@@ -99,6 +101,7 @@ return (
           <BootstrapForm.Group className="mb-3" controlId="formConfirmPassword">
             <BootstrapForm.Control
               type="password"
+              aria-label={t('auth.confirmPassword')}
               placeholder={t('auth.confirmPassword')}
               className={`form-control${errors.confirmPassword ? " is-invalid" : ""}`}
               {...register("confirmPassword", {

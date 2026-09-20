@@ -28,7 +28,7 @@ const ChannelsSidebar = ({ onSelectChannel, activeId }) => {
         <button
           type="button"
           className="p-0 text-primary btn btn-group-vertical"
-          aria-label={t('channels.add')}
+          aria-label="+"
           title={t('channels.add')}
           onClick={() => setShowAddModal(true)}
         >
