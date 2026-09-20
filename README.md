@@ -1,5 +1,7 @@
 # Hexlet Chat (Frontend Project 12)
 
+[![Hexlet check](https://github.com/andreikhanau/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/andreikhanau/frontend-project-12/actions/workflows/hexlet-check.yml)
+
 A small Slack-like chat app built with React, TanStack Query, Zustand, React Hook Form, and Bootstrap.
 
 Live demo: https://frontend-project-12-bkd7.onrender.com/

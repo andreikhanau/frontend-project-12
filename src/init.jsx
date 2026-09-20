@@ -1,5 +1,4 @@
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { MantineProvider } from '@mantine/core';
@@ -10,20 +9,12 @@ import NotFound from './pages/NotFound.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import LogIn from './pages/Login.jsx';
 import SignUp from './pages/SignUp.jsx';
-import i18n from './locales/i18n.js';
 import { createQueryClient } from './api/QueryErrorHandler.js';
 import { createAuthStore } from './stores/authStore.js';
 import { createUIStateStore } from './stores/uiState.js';
 import { StoreProvider } from './stores/StoreProvider.jsx';
-import defaultSocket from './sockets/socket.js';
 
-const init = (options = {}) => {
-  const isContainer = options instanceof Element;
-  const container = isContainer
-    ? options
-    : options.container || document.getElementById('root');
-  const socket = isContainer ? defaultSocket : options.socket || defaultSocket;
-
+const init = (socket) => {
   Sentry.init({
     dsn: import.meta.env.VITE_BUGSINK_DSN,
     environment: import.meta.env.MODE,
@@ -57,9 +48,7 @@ const init = (options = {}) => {
     },
   ]);
 
-  document.title = i18n.t('app.title');
-
-  createRoot(container).render(
+  return (
     <StrictMode>
       <StoreProvider authStore={authStore} uiStateStore={uiStateStore}>
         <MantineProvider>
@@ -69,7 +58,7 @@ const init = (options = {}) => {
           </QueryClientProvider>
         </MantineProvider>
       </StoreProvider>
-    </StrictMode>,
+    </StrictMode>
   );
 };
 

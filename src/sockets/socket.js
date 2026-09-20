@@ -1,7 +1,5 @@
 import { io } from 'socket.io-client';
 
-const socket = io('/', {
+export const createSocket = () => io('/', {
   autoConnect: true,
 });
-
-export default socket;
