@@ -11,7 +11,7 @@ import { useAuthStore, useUIStateStore } from '../stores/useStores.js';
 import ChannelSocketSync from '../sockets/ChannelSocketSync';
 import MessageSocketSync from '../sockets/MessageSocketSync';
 
-function App() {
+function App({ socket }) {
   const username = useAuthStore((state) => state.username);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
@@ -44,8 +44,8 @@ function App() {
   
   return (
     <div className="h-100 d-flex flex-column bg-white">
-      <ChannelSocketSync />
-      <MessageSocketSync />
+      <ChannelSocketSync socket={socket} />
+      <MessageSocketSync socket={socket} />
       <NavBar onLogout={handleLogout} />
 
       {/* Main content area */}

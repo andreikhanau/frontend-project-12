@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import socket from './socket';
 
-function ChannelSocketSync() {
+function ChannelSocketSync({ socket }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -41,7 +40,7 @@ function ChannelSocketSync() {
       socket.off('renameChannel', handleRenameChannel);
       socket.off('removeChannel', handleRemoveChannel);
     };
-  }, [queryClient]);
+  }, [queryClient, socket]);
 
   return null;
 }

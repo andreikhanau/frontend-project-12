@@ -15,8 +15,15 @@ import { createQueryClient } from './api/QueryErrorHandler.js';
 import { createAuthStore } from './stores/authStore.js';
 import { createUIStateStore } from './stores/uiState.js';
 import { StoreProvider } from './stores/StoreProvider.jsx';
+import defaultSocket from './sockets/socket.js';
 
-const init = (container = document.getElementById('root')) => {
+const init = (options = {}) => {
+  const isContainer = options instanceof Element;
+  const container = isContainer
+    ? options
+    : options.container || document.getElementById('root');
+  const socket = isContainer ? defaultSocket : options.socket || defaultSocket;
+
   Sentry.init({
     dsn: import.meta.env.VITE_BUGSINK_DSN,
     environment: import.meta.env.MODE,
@@ -33,7 +40,7 @@ const init = (container = document.getElementById('root')) => {
       path: '/',
       element: (
         <ProtectedRoute>
-          <App />
+          <App socket={socket} />
         </ProtectedRoute>
       ),
       errorElement: <NotFound />,

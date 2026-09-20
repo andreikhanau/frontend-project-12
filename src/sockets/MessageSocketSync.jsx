@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import socket from './socket';
 
-function MessageSocketSync() {
+function MessageSocketSync({ socket }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -21,7 +20,7 @@ function MessageSocketSync() {
     return () => {
       socket.off('newMessage', handleNewMessage);
     };
-  }, [queryClient]);
+  }, [queryClient, socket]);
 
   return null;
 }
