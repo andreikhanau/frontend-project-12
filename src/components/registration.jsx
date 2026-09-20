@@ -125,7 +125,7 @@ return (
 
           {error && (
             <div className="text-danger mt-2">
-              {t('auth.registrationFailed')}
+              {t('auth.userExists')}
             </div>
           )}
         </BootstrapForm>

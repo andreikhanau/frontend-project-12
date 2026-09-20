@@ -28,8 +28,6 @@ const AddChannelModal = ({ show, onClose, onCreated, channels = [] }) => {
         value.trim().length >= 3 || t('channels.channelNameMinLength'),
       maxLength: (value) =>
         value.trim().length <= 20 || t('channels.channelNameMaxLength'),
-      profanity: (value) =>
-        !leoProfanity.check(value) || t('channels.channelNameProfanity'),
       unique: (value) =>
         !channels.some(
           (channel) => channel.name.trim().toLowerCase() === value.trim().toLowerCase()
@@ -46,7 +44,9 @@ const AddChannelModal = ({ show, onClose, onCreated, channels = [] }) => {
 
   const onSubmit = async ({ name: channelName }) => {
     try {
-      const newChannel = await createChannel({ name: channelName.trim() });
+      const newChannel = await createChannel({
+        name: leoProfanity.clean(channelName.trim()),
+      });
       notifications.show({
       title: t('channels.addModalTitle'),
       message: t('channels.createdSuccessfully'),

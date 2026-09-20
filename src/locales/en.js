@@ -28,6 +28,7 @@ const en = {
     signingUp: 'Signing up...',
     signUpButton: 'Sign up',
     registrationFailed: 'Registration failed. Please try again.',
+    userExists: 'This user already exists',
     required: 'Required',
   },
   channels: {
@@ -52,7 +53,8 @@ const en = {
     removeConfirmation: 'Are you sure you want to remove "{{name}}"?',
     renameError: 'Failed to rename channel. Please try again.',
     removeError: 'Failed to remove channel. Please try again.',
-    createdSuccessfully: 'Channel created successfully',
+    createdSuccessfully: 'Channel created',
+    manage: 'Channel management',
     renamedSuccessfully: 'Channel renamed successfully',
     removedSuccessfully: 'Channel removed successfully',
   },

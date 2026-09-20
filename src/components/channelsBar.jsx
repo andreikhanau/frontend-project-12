@@ -59,8 +59,8 @@ const ChannelsSidebar = ({ onSelectChannel, activeId }) => {
                 <Dropdown.Toggle
                   variant="link"
                   className="p-2 border-0 channel-toggle"
-                  aria-label={t('channels.options', { name: ch.name })}
-                  title={t('channels.options', { name: ch.name })}
+                  aria-label={t('channels.manage')}
+                  title={t('channels.manage')}
                 >
                   <ChevronDown className="channel-chevron" size={20} />
                 </Dropdown.Toggle>
