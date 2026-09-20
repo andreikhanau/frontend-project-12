@@ -18,8 +18,8 @@ const RemoveChannelModal = ({ channel, show, onClose, onRemoved }) => {
       });
       onClose();
       onRemoved?.(channel.id);
-    } catch {
-      // The mutation error is displayed below.
+    } catch (error) {
+      console.error('REMOVE ERROR:', error);
     }
   };
 

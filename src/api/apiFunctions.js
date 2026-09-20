@@ -18,6 +18,7 @@ const request = async (url, options = {}, token = null) => {
   return responseText ? JSON.parse(responseText) : null;
 };
 
+
 export const fetchChannels = (token) => request('/channels', {}, token);
 
 export const fetchMessages = (token) => request('/messages', {}, token);
