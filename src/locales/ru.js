@@ -56,7 +56,7 @@ const ru = {
     createdSuccessfully: 'Канал создан',
     manage: 'Управление каналом',
     renamedSuccessfully: 'Канал успешно переименован',
-    removedSuccessfully: 'Канал успешно удален',
+    removedSuccessfully: 'Канал удалён',
   },
   chat: {
     messages_one: '{{count}} сообщение',

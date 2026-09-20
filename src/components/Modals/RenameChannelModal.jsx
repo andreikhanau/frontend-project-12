@@ -70,6 +70,7 @@ const RenameChannelModal = ({ channel, channels = [], show, onClose }) => {
               inputRef.current = element;
             }}
             type="text"
+            aria-label={t('channels.channelName')}
             placeholder={t('channels.channelName')}
             disabled={isLoading || isSubmitting}
             className={errors.name ? 'is-invalid' : ''}

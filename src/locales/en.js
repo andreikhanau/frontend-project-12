@@ -56,7 +56,7 @@ const en = {
     createdSuccessfully: 'Channel created',
     manage: 'Channel management',
     renamedSuccessfully: 'Channel renamed successfully',
-    removedSuccessfully: 'Channel removed successfully',
+    removedSuccessfully: 'Channel removed',
   },
   chat: {
     messages_one: '{{count}} message',
