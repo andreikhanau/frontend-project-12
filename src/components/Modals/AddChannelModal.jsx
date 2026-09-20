@@ -48,10 +48,11 @@ const AddChannelModal = ({ show, onClose, onCreated, channels = [] }) => {
         name: leoProfanity.clean(channelName.trim()),
       });
       notifications.show({
-      title: t('channels.addModalTitle'),
-      message: t('channels.createdSuccessfully'),
-      color: 'green',
-    });
+        id: 'channel-created',
+        title: t('channels.addModalTitle'),
+        message: t('channels.createdSuccessfully'),
+        color: 'green',
+      });
       onCreated?.(newChannel);
       onClose();
     } catch {

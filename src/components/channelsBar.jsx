@@ -65,10 +65,14 @@ const ChannelsSidebar = ({ onSelectChannel, activeId }) => {
                   <ChevronDown className="channel-chevron" size={20} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => setChannelToRename(ch)}>
+                  <Dropdown.Item
+                    role="menuitem"
+                    onClick={() => setChannelToRename(ch)}
+                  >
                     {t('channels.rename')}
                   </Dropdown.Item>
                   <Dropdown.Item
+                    role="menuitem"
                     className="text-danger"
                     onClick={() => setChannelToRemove(ch)}
                   >
