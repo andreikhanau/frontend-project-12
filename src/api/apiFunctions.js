@@ -14,11 +14,8 @@ const request = async (url, options = {}, token = null) => {
     throw new Error(`Request failed: ${response.status}`);
   }
 
-  if (response.status === 204) {
-    return null;
-  }
-
-  return response.json();
+  const responseText = await response.text();
+  return responseText ? JSON.parse(responseText) : null;
 };
 
 export const fetchChannels = (token) => request('/channels', {}, token);
